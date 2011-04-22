@@ -2,11 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.odiago.avro</groupId>
-  <artifactId>avro</artifactId>
+  <artifactId>odiago-avro</artifactId>
   <version>1.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>avro</name>
+  <name>odiago-avro</name>
   <url>http://www.odiago.com</url>
 
   <properties>
