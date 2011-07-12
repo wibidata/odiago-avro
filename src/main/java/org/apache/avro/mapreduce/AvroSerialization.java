@@ -33,11 +33,12 @@ import org.apache.avro.io.BinaryDecoder;
 import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.DatumWriter;
+import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapred.AvroValue;
 import org.apache.avro.mapred.AvroWrapper;
+import org.apache.avro.reflect.ReflectDatumWriter;
 import org.apache.avro.specific.SpecificDatumReader;
-import org.apache.avro.specific.SpecificDatumWriter;
 
 /** The {@link Serialization} used by jobs configured with {@link AvroJob}. */
 public class AvroSerialization<T> extends Configured 
@@ -61,8 +62,7 @@ public class AvroSerialization<T> extends Configured
                                        isKey);
   }
   
-  private static final DecoderFactory FACTORY = new DecoderFactory();
-  static { FACTORY.configureDirectDecoder(true); }
+  private static final DecoderFactory FACTORY = DecoderFactory.get();
 
   private class AvroWrapperDeserializer
     implements Deserializer<AvroWrapper<T>> {
@@ -77,7 +77,7 @@ public class AvroSerialization<T> extends Configured
     }
     
     public void open(InputStream in) {
-      this.decoder = FACTORY.createBinaryDecoder(in, decoder);
+      this.decoder = FACTORY.directBinaryDecoder(in, decoder);
     }
     
     public AvroWrapper<T> deserialize(AvroWrapper<T> wrapper)
@@ -107,7 +107,7 @@ public class AvroSerialization<T> extends Configured
         : (AvroKey.class.isAssignableFrom(c)
             ? AvroJob.getMapOutputKeySchema(getConf())
             : AvroJob.getMapOutputValueSchema(getConf()));
-    return new AvroWrapperSerializer(new SpecificDatumWriter<T>(schema));
+    return new AvroWrapperSerializer(new ReflectDatumWriter<T>(schema));
   }
 
   private class AvroWrapperSerializer implements Serializer<AvroWrapper<T>> {
@@ -122,15 +122,22 @@ public class AvroSerialization<T> extends Configured
 
     public void open(OutputStream out) {
       this.out = out;
-      this.encoder = new BinaryEncoder(out);
+      this.encoder = new EncoderFactory().configureBlockSize(512)
+          .binaryEncoder(out, null);
     }
 
     public void serialize(AvroWrapper<T> wrapper) throws IOException {
       writer.write(wrapper.datum(), encoder);
+      // would be a lot faster if the Serializer interface had a flush()
+      // method and the Hadoop framework called it when needed rather
+      // than for every record.
+      encoder.flush();
     }
 
     public void close() throws IOException {
       out.close();
     }
+
   }
+
 }
