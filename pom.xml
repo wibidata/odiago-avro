@@ -3,7 +3,7 @@
 
   <groupId>com.odiago.avro</groupId>
   <artifactId>odiago-avro</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>odiago-avro</name>
