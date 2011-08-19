@@ -12,11 +12,9 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.conf.Configuration;
 
 /**
- * Methods for configuring jobs that work with avro.
- *
- * @author <a href="mailto:wugarrett@gmail.com">Garrett Wu</a>
+ * Utility methods for configuring jobs that work with Avro.
  */
-public class AvroJob {
+public final class AvroJob {
   private AvroJob() {}
 
   private static String INPUT_SCHEMA_CONFIG_FIELD = "avro.schema.input";

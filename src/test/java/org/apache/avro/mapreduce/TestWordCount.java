@@ -228,7 +228,7 @@ public class TestWordCount {
     FileInputFormat.setInputPaths(job, new Path(getClass()
             .getResource("/org/apache/avro/mapreduce/mapreduce-test-input.avro")
             .toURI().toString()));
-    job.setInputFormatClass(AvroInputFormat.class);
+    job.setInputFormatClass(AvroKeyInputFormat.class);
     AvroJob.setInputSchema(job, TextStats.SCHEMA$);
 
     job.setMapperClass(StatCountMapper.class);
@@ -269,7 +269,7 @@ public class TestWordCount {
     FileInputFormat.setInputPaths(job, new Path(getClass()
             .getResource("/org/apache/avro/mapreduce/mapreduce-test-input.avro")
             .toURI().toString()));
-    job.setInputFormatClass(AvroInputFormat.class);
+    job.setInputFormatClass(AvroKeyInputFormat.class);
     AvroJob.setInputSchema(job, TextStats.SCHEMA$);
 
     job.setMapperClass(SortMapper.class);
