@@ -11,6 +11,8 @@ import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A MapReduce InputFormat that can handle Avro container files.
@@ -20,13 +22,16 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
  * NullWritable.</p>
  */
 public class AvroKeyInputFormat<T> extends FileInputFormat<AvroKey<T>, NullWritable> {
+  private static final Logger LOG = LoggerFactory.getLogger(AvroKeyInputFormat.class);
+
   /** {@inheritDoc} */
   @Override
   public RecordReader<AvroKey<T>, NullWritable> createRecordReader(
       InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
     Schema readerSchema = AvroJob.getInputSchema(context.getConfiguration());
     if (null == readerSchema) {
-      throw new IOException("Reader schema was not set. Use AvroJob.setInputSchema()");
+      LOG.warn("Reader schema was not set. Use AvroJob.setInputSchema() if desired.");
+      LOG.info("Using a reader schema equal to the writer schema.");
     }
     return new AvroKeyRecordReader<T>(readerSchema);
   }
