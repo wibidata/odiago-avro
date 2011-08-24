@@ -59,6 +59,9 @@ public class AvroSerializer<T> implements Serializer<AvroWrapper<T>> {
    * @param writerSchema The writer schema for the Avro data being serialized.
    */
   public AvroSerializer(Schema writerSchema) {
+    if (null == writerSchema) {
+      throw new IllegalArgumentException("Writer schema may not be null");
+    }
     mWriterSchema = writerSchema;
     mAvroDatumWriter = new SpecificDatumWriter<T>(writerSchema);
   }

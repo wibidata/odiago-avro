@@ -17,14 +17,19 @@ import org.apache.hadoop.conf.Configuration;
 public final class AvroJob {
   private AvroJob() {}
 
-  private static String INPUT_SCHEMA_CONFIG_FIELD = "avro.schema.input";
+  private static String INPUT_KEY_SCHEMA_CONFIG_FIELD = "avro.schema.input.key";
+  private static String INPUT_VALUE_SCHEMA_CONFIG_FIELD = "avro.schema.input.value";
   private static String KEY_MAP_OUTPUT_SCHEMA_CONFIG_FIELD = "avro.schema.mapoutput.key";
   private static String VALUE_MAP_OUTPUT_SCHEMA_CONFIG_FIELD = "avro.schema.mapoutput.value";
-  private static String OUTPUT_KEY_SCHEMA_CONFIG_FIELD = "avro.key.schema.output";
-  private static String OUTPUT_VALUE_SCHEMA_CONFIG_FIELD = "avro.value.schema.output";
+  private static String OUTPUT_KEY_SCHEMA_CONFIG_FIELD = "avro.schema.output.key";
+  private static String OUTPUT_VALUE_SCHEMA_CONFIG_FIELD = "avro.schema.output.value";
 
-  public static void setInputSchema(Job job, Schema schema) {
-    job.getConfiguration().set(INPUT_SCHEMA_CONFIG_FIELD, schema.toString());
+  public static void setInputKeySchema(Job job, Schema schema) {
+    job.getConfiguration().set(INPUT_KEY_SCHEMA_CONFIG_FIELD, schema.toString());
+  }
+
+  public static void setInputValueSchema(Job job, Schema schema) {
+    job.getConfiguration().set(INPUT_VALUE_SCHEMA_CONFIG_FIELD, schema.toString());
   }
 
   public static void setMapOutputKeySchema(Job job, Schema schema) {
@@ -63,8 +68,13 @@ public final class AvroJob {
     }
   }
 
-  public static Schema getInputSchema(Configuration conf) {
-    String schemaString = conf.get(INPUT_SCHEMA_CONFIG_FIELD);
+  public static Schema getInputKeySchema(Configuration conf) {
+    String schemaString = conf.get(INPUT_KEY_SCHEMA_CONFIG_FIELD);
+    return schemaString != null ? Schema.parse(schemaString) : null;
+  }
+
+  public static Schema getInputValueSchema(Configuration conf) {
+    String schemaString = conf.get(INPUT_VALUE_SCHEMA_CONFIG_FIELD);
     return schemaString != null ? Schema.parse(schemaString) : null;
   }
 

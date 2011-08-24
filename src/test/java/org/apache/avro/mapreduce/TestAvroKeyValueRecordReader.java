@@ -11,10 +11,11 @@ import java.io.IOException;
 import org.apache.avro.Schema;
 import org.apache.avro.file.SeekableFileInput;
 import org.apache.avro.file.SeekableInput;
+import org.apache.avro.generic.GenericData;
 import org.apache.avro.mapred.AvroKey;
+import org.apache.avro.mapred.AvroValue;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
@@ -22,7 +23,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-public class TestAvroKeyRecordReader {
+public class TestAvroKeyValueRecordReader {
   /** A temporary directory for test data. */
   @Rule
   public TemporaryFolder mTempDir = new TemporaryFolder();
@@ -33,16 +34,29 @@ public class TestAvroKeyRecordReader {
   @Test
   public void testReadRecords() throws IOException, InterruptedException {
     // Create the test avro file input with two records:
-    //   1. "first"
-    //   2. "second"
-    final SeekableInput avroFileInput = new SeekableFileInput(
-        AvroFiles.createFile(new File(mTempDir.getRoot(), "myStringfile.avro"),
-            Schema.create(Schema.Type.STRING), "first", "second"));
+    //   1. <"firstkey", 1>
+    //   2. <"second", 2>
+    Schema keyValueSchema = AvroKeyValue.getSchema(
+        Schema.create(Schema.Type.STRING), Schema.create(Schema.Type.INT));
 
-    // Create the record reader.
-    Schema readerSchema = Schema.create(Schema.Type.STRING);
-    RecordReader<AvroKey<CharSequence>, NullWritable> recordReader
-        = new AvroKeyRecordReader(readerSchema) {
+    AvroKeyValue<CharSequence, Integer> firstInputRecord
+        = new AvroKeyValue<CharSequence, Integer>(new GenericData.Record(keyValueSchema));
+    firstInputRecord.setKey("first");
+    firstInputRecord.setValue(1);
+
+    AvroKeyValue<CharSequence, Integer> secondInputRecord
+        = new AvroKeyValue<CharSequence, Integer>(new GenericData.Record(keyValueSchema));
+    secondInputRecord.setKey("second");
+    secondInputRecord.setValue(2);
+
+    final SeekableInput avroFileInput = new SeekableFileInput(
+        AvroFiles.createFile(new File(mTempDir.getRoot(), "myInputFile.avro"), keyValueSchema,
+            firstInputRecord.get(), secondInputRecord.get()));
+
+    // Create the record reader over the avro input file.
+    RecordReader<AvroKey<CharSequence>, AvroValue<Integer>> recordReader
+        = new AvroKeyValueRecordReader(
+            Schema.create(Schema.Type.STRING), Schema.create(Schema.Type.INT)) {
       @Override
       protected SeekableInput createSeekableInput(Configuration conf, Path path)
           throws IOException {
@@ -73,7 +87,7 @@ public class TestAvroKeyRecordReader {
 
     // Some variables to hold the records.
     AvroKey<CharSequence> key;
-    NullWritable value;
+    AvroValue<Integer> value;
 
     // Read the first record.
     assertTrue("Expected at least one record", recordReader.nextKeyValue());
@@ -83,8 +97,8 @@ public class TestAvroKeyRecordReader {
     assertNotNull("First record had null key", key);
     assertNotNull("First record had null value", value);
 
-    CharSequence firstString = key.datum();
-    assertEquals("first", firstString.toString());
+    assertEquals("first", key.datum().toString());
+    assertEquals(1, value.datum().intValue());
 
     assertTrue("getCurrentKey() returned different keys for the same record",
         key == recordReader.getCurrentKey());
@@ -99,8 +113,8 @@ public class TestAvroKeyRecordReader {
     assertNotNull("Second record had null key", key);
     assertNotNull("Second record had null value", value);
 
-    CharSequence secondString = key.datum();
-    assertEquals("second", secondString.toString());
+    assertEquals("second", key.datum().toString());
+    assertEquals(2, value.datum().intValue());
 
     assertEquals("Progress should be complete (2 out of 2 records processed)",
         1.0f, recordReader.getProgress(), 0.0f);

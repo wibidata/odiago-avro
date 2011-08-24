@@ -26,7 +26,7 @@ public class TestAvroKeyInputFormat {
   public void testCreateRecordReader() throws IOException, InterruptedException {
     // Set up the job configuration.
     Job job = new Job();
-    AvroJob.setInputSchema(job, Schema.create(Schema.Type.STRING));
+    AvroJob.setInputKeySchema(job, Schema.create(Schema.Type.STRING));
     Configuration conf = job.getConfiguration();
 
     FileSplit inputSplit = createMock(FileSplit.class);
