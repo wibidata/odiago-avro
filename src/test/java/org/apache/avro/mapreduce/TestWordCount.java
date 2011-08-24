@@ -155,7 +155,7 @@ public class TestWordCount {
     job.setMapOutputValueClass(IntWritable.class);
 
     job.setReducerClass(GenericStatsReducer.class);
-    AvroJob.setOutputSchema(job, STATS_SCHEMA);
+    AvroJob.setOutputKeySchema(job, STATS_SCHEMA);
 
     job.setOutputFormatClass(AvroKeyOutputFormat.class);
     Path outputPath = new Path(tmpFolder.getRoot().getPath() + "/out-generic");
@@ -195,7 +195,7 @@ public class TestWordCount {
     job.setMapOutputValueClass(IntWritable.class);
 
     job.setReducerClass(SpecificStatsReducer.class);
-    AvroJob.setOutputSchema(job, TextStats.SCHEMA$);
+    AvroJob.setOutputKeySchema(job, TextStats.SCHEMA$);
 
     job.setOutputFormatClass(AvroKeyOutputFormat.class);
     Path outputPath = new Path(tmpFolder.getRoot().getPath() + "/out-specific");
@@ -236,7 +236,7 @@ public class TestWordCount {
     job.setMapOutputValueClass(IntWritable.class);
 
     job.setReducerClass(SpecificStatsReducer.class);
-    AvroJob.setOutputSchema(job, TextStats.SCHEMA$);
+    AvroJob.setOutputKeySchema(job, TextStats.SCHEMA$);
 
     job.setOutputFormatClass(AvroKeyOutputFormat.class);
     Path outputPath = new Path(tmpFolder.getRoot().getPath() + "/out-specific-input");
@@ -277,7 +277,7 @@ public class TestWordCount {
     job.setMapOutputValueClass(NullWritable.class);
 
     job.setReducerClass(SortReducer.class);
-    AvroJob.setOutputSchema(job, TextStats.SCHEMA$);
+    AvroJob.setOutputKeySchema(job, TextStats.SCHEMA$);
 
     job.setOutputFormatClass(AvroKeyOutputFormat.class);
     Path outputPath = new Path(tmpFolder.getRoot().getPath() + "/out-specific-input");

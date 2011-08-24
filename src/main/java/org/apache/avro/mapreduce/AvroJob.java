@@ -20,7 +20,8 @@ public final class AvroJob {
   private static String INPUT_SCHEMA_CONFIG_FIELD = "avro.schema.input";
   private static String KEY_MAP_OUTPUT_SCHEMA_CONFIG_FIELD = "avro.schema.mapoutput.key";
   private static String VALUE_MAP_OUTPUT_SCHEMA_CONFIG_FIELD = "avro.schema.mapoutput.value";
-  private static String OUTPUT_SCHEMA_CONFIG_FIELD = "avro.schema.output";
+  private static String OUTPUT_KEY_SCHEMA_CONFIG_FIELD = "avro.key.schema.output";
+  private static String OUTPUT_VALUE_SCHEMA_CONFIG_FIELD = "avro.value.schema.output";
 
   public static void setInputSchema(Job job, Schema schema) {
     job.getConfiguration().set(INPUT_SCHEMA_CONFIG_FIELD, schema.toString());
@@ -40,10 +41,15 @@ public final class AvroJob {
     addAvroSerialization(job.getConfiguration());
   }
 
-  public static void setOutputSchema(Job job, Schema schema) {
+  public static void setOutputKeySchema(Job job, Schema schema) {
     job.setOutputKeyClass(AvroKey.class);
-    job.setOutputValueClass(NullWritable.class);
-    job.getConfiguration().set(OUTPUT_SCHEMA_CONFIG_FIELD, schema.toString());
+    job.getConfiguration().set(OUTPUT_KEY_SCHEMA_CONFIG_FIELD, schema.toString());
+    addAvroSerialization(job.getConfiguration());
+  }
+
+  public static void setOutputValueSchema(Job job, Schema schema) {
+    job.setOutputValueClass(AvroValue.class);
+    job.getConfiguration().set(OUTPUT_VALUE_SCHEMA_CONFIG_FIELD, schema.toString());
     addAvroSerialization(job.getConfiguration());
   }
 
@@ -72,8 +78,13 @@ public final class AvroJob {
     return schemaString != null ? Schema.parse(schemaString) : null;
   }
 
-  public static Schema getOutputSchema(Configuration conf) {
-    String schemaString = conf.get(OUTPUT_SCHEMA_CONFIG_FIELD);
+  public static Schema getOutputKeySchema(Configuration conf) {
+    String schemaString = conf.get(OUTPUT_KEY_SCHEMA_CONFIG_FIELD);
+    return schemaString != null ? Schema.parse(schemaString) : null;
+  }
+
+  public static Schema getOutputValueSchema(Configuration conf) {
+    String schemaString = conf.get(OUTPUT_VALUE_SCHEMA_CONFIG_FIELD);
     return schemaString != null ? Schema.parse(schemaString) : null;
   }
 }

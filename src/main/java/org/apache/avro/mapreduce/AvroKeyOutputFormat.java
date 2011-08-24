@@ -9,8 +9,6 @@ import org.apache.avro.Schema;
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapred.AvroOutputFormat;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
@@ -24,7 +22,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
  *
  * @param <T> The (java) type of the Avro data to write.
  */
-public class AvroKeyOutputFormat<T> extends FileOutputFormat<AvroKey<T>, NullWritable> {
+public class AvroKeyOutputFormat<T> extends AvroOutputFormatBase<AvroKey<T>, NullWritable> {
   /** A factory for creating record writers. */
   private final RecordWriterFactory mRecordWriterFactory;
 
@@ -68,32 +66,14 @@ public class AvroKeyOutputFormat<T> extends FileOutputFormat<AvroKey<T>, NullWri
   @Override
   public RecordWriter<AvroKey<T>, NullWritable> getRecordWriter(TaskAttemptContext context)
       throws IOException {
-    Configuration conf = context.getConfiguration();
-
     // Get the writer schema.
-    Schema writerSchema = AvroJob.getOutputSchema(conf);
+    Schema writerSchema = AvroJob.getOutputKeySchema(context.getConfiguration());
     if (null == writerSchema) {
       throw new IOException(
-          "AvroOutputFormat requires an output schema. Use AvroJob.setOutputSchema().");
+          "AvroKeyOutputFormat requires an output schema. Use AvroJob.setOutputKeySchema().");
     }
 
-    // Get the compression codec.
-    CodecFactory compressionCodec;
-    if (FileOutputFormat.getCompressOutput(context)) {
-      // Deflate compression.
-      int compressionLevel = conf.getInt(
-          org.apache.avro.mapred.AvroOutputFormat.DEFLATE_LEVEL_KEY,
-          org.apache.avro.mapred.AvroOutputFormat.DEFAULT_DEFLATE_LEVEL);
-      compressionCodec = CodecFactory.deflateCodec(compressionLevel);
-    } else {
-      // No compression.
-      compressionCodec = CodecFactory.nullCodec();
-    }
-
-    // Create the Avro container file.
-    Path path = getDefaultWorkFile(context, org.apache.avro.mapred.AvroOutputFormat.EXT);
-    OutputStream outputStream = path.getFileSystem(context.getConfiguration()).create(path);
-
-    return mRecordWriterFactory.create(writerSchema, compressionCodec, outputStream);
+    return mRecordWriterFactory.create(
+        writerSchema, getCompressionCodec(context), getAvroFileOutputStream(context));
   }
 }

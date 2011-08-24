@@ -51,7 +51,7 @@ public class TestAvroKeyOutputFormat {
     Job job = new Job(conf);
     job.getConfiguration().set("mapred.output.dir", mTempDir.getRoot().getPath());
     Schema writerSchema = Schema.create(Schema.Type.INT);
-    AvroJob.setOutputSchema(job, writerSchema);
+    AvroJob.setOutputKeySchema(job, writerSchema);
     TaskAttemptContext context = createMock(TaskAttemptContext.class);
     expect(context.getConfiguration())
         .andReturn(job.getConfiguration()).anyTimes();
