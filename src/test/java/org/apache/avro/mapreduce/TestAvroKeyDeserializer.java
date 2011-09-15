@@ -20,15 +20,16 @@ public class TestAvroKeyDeserializer {
   @Test
   public void testDeserialize() throws IOException {
     // Create a deserializer.
+    Schema writerSchema = Schema.create(Schema.Type.STRING);
     Schema readerSchema = Schema.create(Schema.Type.STRING);
     AvroKeyDeserializer<CharSequence> deserializer
-        = new AvroKeyDeserializer<CharSequence>(readerSchema);
+        = new AvroKeyDeserializer<CharSequence>(writerSchema, readerSchema);
 
-    // Check the reader schema.
+    // Check the schemas.
+    assertEquals(writerSchema, deserializer.getWriterSchema());
     assertEquals(readerSchema, deserializer.getReaderSchema());
 
     // Write some records to deserialize.
-    Schema writerSchema = Schema.create(Schema.Type.STRING);
     DatumWriter<CharSequence> datumWriter = new GenericDatumWriter<CharSequence>(writerSchema);
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     Encoder encoder = EncoderFactory.get().binaryEncoder(outputStream, null);

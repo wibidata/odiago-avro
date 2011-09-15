@@ -16,10 +16,11 @@ public class AvroValueDeserializer<D> extends AvroDeserializer<AvroValue<D>, D> 
   /**
    * Constructor.
    *
+   * @param writerSchema The Avro writer schema for the data to deserialize.
    * @param readerSchema The Avro reader schema for the data to deserialize.
    */
-  public AvroValueDeserializer(Schema readerSchema) {
-    super(readerSchema);
+  public AvroValueDeserializer(Schema writerSchema, Schema readerSchema) {
+    super(writerSchema, readerSchema);
   }
 
   /**

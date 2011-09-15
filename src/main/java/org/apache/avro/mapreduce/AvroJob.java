@@ -2,99 +2,174 @@
 
 package org.apache.avro.mapreduce;
 
-import java.util.Collection;
-
 import org.apache.avro.Schema;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapred.AvroValue;
-import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.Job;
 
 /**
  * Utility methods for configuring jobs that work with Avro.
+ *
+ * <p>When using Avro data as MapReduce keys and values, data must be wrapped in a
+ * suitable AvroWrapper implementation.  MapReduce keys must be wrapped in an AvroKey
+ * object, and MapReduce values must be wrapped in an AvroValue object.</p>
+ *
+ * <p>Suppose you would like to write a line count mapper that reads from a text file. If
+ * instead of using a Text and IntWritable output value, you would like to use Avro data
+ * with a schema of <i>"string"</i> and <i>"int"</i>, respectively, you may parameterize
+ * your mapper with {@code AvroKey<CharSequence>} and {@code AvroValue<Integer>}
+ * types.  Then, use the <code>setMapOutputKeySchema()</code> and
+ * <code>setMapOutputValueSchema()</code> methods to set writer schemas for the records
+ * you will generate.</p>
  */
 public final class AvroJob {
+  /** Disable the constructor for this utility class. */
   private AvroJob() {}
 
-  private static String INPUT_KEY_SCHEMA_CONFIG_FIELD = "avro.schema.input.key";
-  private static String INPUT_VALUE_SCHEMA_CONFIG_FIELD = "avro.schema.input.value";
-  private static String KEY_MAP_OUTPUT_SCHEMA_CONFIG_FIELD = "avro.schema.mapoutput.key";
-  private static String VALUE_MAP_OUTPUT_SCHEMA_CONFIG_FIELD = "avro.schema.mapoutput.value";
-  private static String OUTPUT_KEY_SCHEMA_CONFIG_FIELD = "avro.schema.output.key";
-  private static String OUTPUT_VALUE_SCHEMA_CONFIG_FIELD = "avro.schema.output.value";
+  /** Configuration key for the input key schema. */
+  private static String CONF_INPUT_KEY_SCHEMA = "avro.schema.input.key";
 
+  /** Configuration key for the input value schema. */
+  private static String CONF_INPUT_VALUE_SCHEMA = "avro.schema.input.value";
+
+  /** Configuration key for the output key schema. */
+  private static String CONF_OUTPUT_KEY_SCHEMA = "avro.schema.output.key";
+
+  /** Configuration key for the output value schema. */
+  private static String CONF_OUTPUT_VALUE_SCHEMA = "avro.schema.output.value";
+
+  /**
+   * Sets the job input key schema.
+   *
+   * @param job The job to configure.
+   * @param schema The input key schema.
+   */
   public static void setInputKeySchema(Job job, Schema schema) {
-    job.getConfiguration().set(INPUT_KEY_SCHEMA_CONFIG_FIELD, schema.toString());
+    job.getConfiguration().set(CONF_INPUT_KEY_SCHEMA, schema.toString());
   }
 
+  /**
+   * Sets the job input value schema.
+   *
+   * @param job The job to configure.
+   * @param schema The input value schema.
+   */
   public static void setInputValueSchema(Job job, Schema schema) {
-    job.getConfiguration().set(INPUT_VALUE_SCHEMA_CONFIG_FIELD, schema.toString());
+    job.getConfiguration().set(CONF_INPUT_VALUE_SCHEMA, schema.toString());
   }
 
+  /**
+   * Sets the map output key schema.
+   *
+   * @param job The job to configure.
+   * @param schema The map output key schema.
+   */
   public static void setMapOutputKeySchema(Job job, Schema schema) {
     job.setMapOutputKeyClass(AvroKey.class);
-    job.getConfiguration().set(KEY_MAP_OUTPUT_SCHEMA_CONFIG_FIELD, schema.toString());
     job.setGroupingComparatorClass(AvroKeyComparator.class);
     job.setSortComparatorClass(AvroKeyComparator.class);
-    addAvroSerialization(job.getConfiguration());
+    AvroSerialization.setKeyWriterSchema(job.getConfiguration(), schema);
+    AvroSerialization.setKeyReaderSchema(job.getConfiguration(), schema);
+    AvroSerialization.addToConfiguration(job.getConfiguration());
   }
 
+  /**
+   * Sets the map output value schema.
+   *
+   * @param job The job to configure.
+   * @param schema The map output value schema.
+   */
   public static void setMapOutputValueSchema(Job job, Schema schema) {
     job.setMapOutputValueClass(AvroValue.class);
-    job.getConfiguration().set(VALUE_MAP_OUTPUT_SCHEMA_CONFIG_FIELD, schema.toString());
-    addAvroSerialization(job.getConfiguration());
+    AvroSerialization.setValueWriterSchema(job.getConfiguration(), schema);
+    AvroSerialization.setValueReaderSchema(job.getConfiguration(), schema);
+    AvroSerialization.addToConfiguration(job.getConfiguration());
   }
 
+  /**
+   * Sets the job output key schema.
+   *
+   * @param job The job to configure.
+   * @param schema The job output key schema.
+   */
   public static void setOutputKeySchema(Job job, Schema schema) {
     job.setOutputKeyClass(AvroKey.class);
-    job.getConfiguration().set(OUTPUT_KEY_SCHEMA_CONFIG_FIELD, schema.toString());
-    addAvroSerialization(job.getConfiguration());
+    job.getConfiguration().set(CONF_OUTPUT_KEY_SCHEMA, schema.toString());
   }
 
+  /**
+   * Sets the job output value schema.
+   *
+   * @param job The job to configure.
+   * @param schema The job output value schema.
+   */
   public static void setOutputValueSchema(Job job, Schema schema) {
     job.setOutputValueClass(AvroValue.class);
-    job.getConfiguration().set(OUTPUT_VALUE_SCHEMA_CONFIG_FIELD, schema.toString());
-    addAvroSerialization(job.getConfiguration());
+    job.getConfiguration().set(CONF_OUTPUT_VALUE_SCHEMA, schema.toString());
   }
 
-  private static void addAvroSerialization(Configuration conf) {
-    Collection<String> serializations =
-        conf.getStringCollection("io.serializations");
-    if (!serializations.contains(AvroSerialization.class.getName())) {
-      serializations.add(AvroSerialization.class.getName());
-      conf.setStrings("io.serializations",
-          serializations.toArray(new String[0]));
-    }
-  }
-
+  /**
+   * Gets the job input key schema.
+   *
+   * @param conf The job configuration.
+   * @return The job input key schema, or null if not set.
+   */
   public static Schema getInputKeySchema(Configuration conf) {
-    String schemaString = conf.get(INPUT_KEY_SCHEMA_CONFIG_FIELD);
+    String schemaString = conf.get(CONF_INPUT_KEY_SCHEMA);
     return schemaString != null ? Schema.parse(schemaString) : null;
   }
 
+  /**
+   * Gets the job input value schema.
+   *
+   * @param conf The job configuration.
+   * @return The job input value schema, or null if not set.
+   */
   public static Schema getInputValueSchema(Configuration conf) {
-    String schemaString = conf.get(INPUT_VALUE_SCHEMA_CONFIG_FIELD);
+    String schemaString = conf.get(CONF_INPUT_VALUE_SCHEMA);
     return schemaString != null ? Schema.parse(schemaString) : null;
   }
 
+  /**
+   * Gets the map output key schema.
+   *
+   * @param conf The job configuration.
+   * @return The map output key schema, or null if not set.
+   */
   public static Schema getMapOutputKeySchema(Configuration conf) {
-    String schemaString = conf.get(KEY_MAP_OUTPUT_SCHEMA_CONFIG_FIELD);
-    return schemaString != null ? Schema.parse(schemaString) : null;
+    return AvroSerialization.getKeyWriterSchema(conf);
   }
 
+  /**
+   * Gets the map output value schema.
+   *
+   * @param conf The job configuration.
+   * @return The map output value schema, or null if not set.
+   */
   public static Schema getMapOutputValueSchema(Configuration conf) {
-    String schemaString = conf.get(VALUE_MAP_OUTPUT_SCHEMA_CONFIG_FIELD);
-    return schemaString != null ? Schema.parse(schemaString) : null;
+    return AvroSerialization.getValueWriterSchema(conf);
   }
 
+  /**
+   * Gets the job output key schema.
+   *
+   * @param conf The job configuration.
+   * @return The job output key schema, or null if not set.
+   */
   public static Schema getOutputKeySchema(Configuration conf) {
-    String schemaString = conf.get(OUTPUT_KEY_SCHEMA_CONFIG_FIELD);
+    String schemaString = conf.get(CONF_OUTPUT_KEY_SCHEMA);
     return schemaString != null ? Schema.parse(schemaString) : null;
   }
 
+  /**
+   * Gets the job output value schema.
+   *
+   * @param conf The job configuration.
+   * @return The job output value schema, or null if not set.
+   */
   public static Schema getOutputValueSchema(Configuration conf) {
-    String schemaString = conf.get(OUTPUT_VALUE_SCHEMA_CONFIG_FIELD);
+    String schemaString = conf.get(CONF_OUTPUT_VALUE_SCHEMA);
     return schemaString != null ? Schema.parse(schemaString) : null;
   }
 }

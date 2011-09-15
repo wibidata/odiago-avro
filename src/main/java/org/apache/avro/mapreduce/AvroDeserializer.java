@@ -17,9 +17,8 @@ import org.apache.hadoop.io.serializer.Deserializer;
  * Deserializes AvroWrapper objects within Hadoop.
  *
  * <p>Keys and values containing Avro tyeps are more efficiently serialized outside of the
- * WritableSerialization model, so they are wrapper in {@link
- * org.apache.avro.mapred.AvroWrapper} objects and deserialization is handled by this
- * class.</p>
+ * WritableSerialization model, so they are wrapper in {@link org.apache.avro.mapred.AvroWrapper}
+ * objects and deserialization is handled by this class.</p>
  *
  * <p>MapReduce jobs that use AvroWrapper objects as keys or values need to be configured
  * with {@link org.apache.avro.mapreduce.AvroSerialization}.  Use {@link
@@ -29,6 +28,9 @@ import org.apache.hadoop.io.serializer.Deserializer;
  * @param <D> The Java type of the Avro data being wrapped.
  */
 public abstract class AvroDeserializer<T extends AvroWrapper<D>, D> implements Deserializer<T> {
+  /** The Avro writer schema for deserializing. */
+  private final Schema mWriterSchema;
+
   /** The Avro reader schema for deserializing. */
   private final Schema mReaderSchema;
 
@@ -41,11 +43,22 @@ public abstract class AvroDeserializer<T extends AvroWrapper<D>, D> implements D
   /**
    * Constructor.
    *
-   * @param readerSchema The Avro reader schema for the data to deserialize.
+   * @param writerSchema The Avro writer schema for the data to deserialize.
+   * @param readerSchema The Avro reader schema for the data to deserialize (may be null).
    */
-  protected AvroDeserializer(Schema readerSchema) {
-    mReaderSchema = readerSchema;
-    mAvroDatumReader = new SpecificDatumReader<D>(readerSchema);
+  protected AvroDeserializer(Schema writerSchema, Schema readerSchema) {
+    mWriterSchema = writerSchema;
+    mReaderSchema = null != readerSchema ? readerSchema : writerSchema;
+    mAvroDatumReader = new SpecificDatumReader<D>(mWriterSchema, mReaderSchema);
+  }
+
+  /**
+   * Gets the writer schema used for deserializing.
+   *
+   * @return The writer schema;
+   */
+  public Schema getWriterSchema() {
+    return mWriterSchema;
   }
 
   /**
