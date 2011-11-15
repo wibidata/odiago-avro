@@ -96,4 +96,46 @@ public class AvroKeyValue<K, V> {
         new Schema.Field(VALUE_FIELD, valueSchema, "The value", null)));
     return schema;
   }
+
+  /**
+   * A wrapper for iterators over GenericRecords that are known to be KeyValue records.
+   *
+   * @param <K> The key type.
+   * @param <V> The value type.
+   */
+  public static class Iterator<K, V> implements java.util.Iterator<AvroKeyValue<K, V>> {
+    /** The wrapped iterator. */
+    private final java.util.Iterator<? extends GenericRecord> mGenericIterator;
+
+    /**
+     * Constructs an iterator over key-value map entries out of a generic iterator.
+     *
+     * @param genericIterator An iterator over some generic record entries.
+     */
+    public Iterator(java.util.Iterator<? extends GenericRecord> genericIterator) {
+      mGenericIterator = genericIterator;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean hasNext() {
+      return mGenericIterator.hasNext();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public AvroKeyValue<K, V> next() {
+      GenericRecord genericRecord = mGenericIterator.next();
+      if (null == genericRecord) {
+        return null;
+      }
+      return new AvroKeyValue<K, V>(genericRecord);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void remove() {
+      mGenericIterator.remove();
+    }
+  }
 }
