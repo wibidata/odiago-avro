@@ -36,7 +36,7 @@ public class AvroKeyOutputFormat<T> extends AvroOutputFormatBase<AvroKey<T>, Nul
   /**
    * Constructor.
    *
-   * @param recordwriterfactory A factory for creating record writers.
+   * @param recordWriterFactory A factory for creating record writers.
    */
   protected AvroKeyOutputFormat(RecordWriterFactory recordWriterFactory) {
     mRecordWriterFactory = recordWriterFactory;

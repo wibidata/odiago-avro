@@ -18,7 +18,7 @@ import org.apache.hadoop.io.serializer.Deserializer;
  * objects and deserialization is handled by this class.</p>
  *
  * <p>MapReduce jobs that use AvroWrapper objects as keys or values need to be configured
- * with {@link org.apache.avro.mapreduce.AvroSerialization}.  Use {@link
+ * with {@link org.apache.avro.io.AvroSerialization}.  Use {@link
  * org.apache.avro.mapreduce.AvroJob} to help with Job configuration.</p>
  *
  * @param <T> The type of Avro wrapper.

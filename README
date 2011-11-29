@@ -1,5 +1,0 @@
-These are the source files required to make Avro Serialization work
-for the new org.apache.hadoop.mapreduce.* API.  There is a JIRA filed
-at AVRO-593 that contains this code as a patch.  Until it is patched,
-we have it here as part of the odiago source tree so we can use it in
-other projects.
