@@ -6,6 +6,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
@@ -14,16 +15,15 @@ import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.io.AvroKeyValue;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.DatumWriter;
-import org.apache.avro.mapreduce.AvroKeyValue;
 import org.apache.avro.util.AvroCharSequenceComparator;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.Map;
 
 /**
  * A SortedKeyValueFile is an indexed Avro container file of KeyValue records sorted by key.
@@ -310,10 +310,10 @@ public class SortedKeyValueFile {
     private final Schema mIndexSchema;
 
     /** The writer for the data file. */
-    private final DataFileWriter mDataFileWriter;
+    private final DataFileWriter<GenericRecord> mDataFileWriter;
 
     /** The writer for the index file. */
-    private final DataFileWriter mIndexFileWriter;
+    private final DataFileWriter<GenericRecord> mIndexFileWriter;
 
     /** We store an indexed key for every mIndexInterval records written to the data file. */
     private final int mIndexInterval;
@@ -482,7 +482,8 @@ public class SortedKeyValueFile {
       Path dataFilePath = new Path(options.getPath(), DATA_FILENAME);
       LOG.debug("Creating writer for avro data file: " + dataFilePath);
       mRecordSchema = AvroKeyValue.getSchema(mKeySchema, mValueSchema);
-      DatumWriter datumWriter = new GenericDatumWriter<GenericRecord>(mRecordSchema);
+      DatumWriter<GenericRecord> datumWriter
+          = new GenericDatumWriter<GenericRecord>(mRecordSchema);
       OutputStream dataOutputStream = fileSystem.create(dataFilePath);
       mDataFileWriter = new DataFileWriter<GenericRecord>(datumWriter)
           .setSyncInterval(1 << 20)  // Set the auto-sync interval sufficiently large, since
@@ -493,7 +494,8 @@ public class SortedKeyValueFile {
       Path indexFilePath = new Path(options.getPath(), INDEX_FILENAME);
       LOG.debug("Creating writer for avro index file: " + indexFilePath);
       mIndexSchema = AvroKeyValue.getSchema(mKeySchema, Schema.create(Schema.Type.LONG));
-      DatumWriter indexWriter = new GenericDatumWriter<GenericRecord>(mIndexSchema);
+      DatumWriter<GenericRecord> indexWriter
+          = new GenericDatumWriter<GenericRecord>(mIndexSchema);
       OutputStream indexOutputStream = fileSystem.create(indexFilePath);
       mIndexFileWriter = new DataFileWriter<GenericRecord>(indexWriter)
           .create(mIndexSchema, indexOutputStream);

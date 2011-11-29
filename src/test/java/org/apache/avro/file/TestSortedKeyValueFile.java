@@ -12,8 +12,8 @@ import java.util.List;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.io.AvroKeyValue;
 import org.apache.avro.io.DatumReader;
-import org.apache.avro.mapreduce.AvroKeyValue;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.junit.Rule;
@@ -107,7 +107,8 @@ public class TestSortedKeyValueFile {
     File dataFile = new File(directory, SortedKeyValueFile.DATA_FILENAME);
     DatumReader<GenericRecord> dataReader = new GenericDatumReader<GenericRecord>(
         AvroKeyValue.getSchema(options.getKeySchema(), options.getValueSchema()));
-    DataFileReader<GenericRecord> dataFileReader = new DataFileReader(dataFile, dataReader);
+    DataFileReader<GenericRecord> dataFileReader
+        = new DataFileReader<GenericRecord>(dataFile, dataReader);
 
     try {
       dataFileReader.seek(indexRecords.get(0).getValue());

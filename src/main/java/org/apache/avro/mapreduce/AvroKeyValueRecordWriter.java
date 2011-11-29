@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.avro.Schema;
+import org.apache.avro.io.AvroKeyValue;
+import org.apache.avro.io.AvroDatumConverter;
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.file.DataFileWriter;
 import org.apache.avro.generic.GenericData;
@@ -60,7 +62,7 @@ public class AvroKeyValueRecordWriter<K, V> extends RecordWriter<K, V> {
     mValueConverter = valueConverter;
 
     // Create a reusable output record.
-    mOutputRecord = new AvroKeyValue(new GenericData.Record(mKeyValuePairSchema));
+    mOutputRecord = new AvroKeyValue<Object, Object>(new GenericData.Record(mKeyValuePairSchema));
   }
 
   /**

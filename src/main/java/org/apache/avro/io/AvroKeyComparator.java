@@ -1,10 +1,10 @@
 // (c) Copyright 2011 Odiago, Inc.
 
-package org.apache.avro.mapreduce;
+package org.apache.avro.io;
 
 import org.apache.avro.Schema;
-import org.apache.avro.io.BinaryData;
 import org.apache.avro.mapred.AvroKey;
+import org.apache.avro.mapreduce.AvroJob;
 import org.apache.avro.specific.SpecificData;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;

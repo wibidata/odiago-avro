@@ -12,6 +12,7 @@ import org.apache.avro.Schema;
 import org.apache.avro.file.SeekableFileInput;
 import org.apache.avro.file.SeekableInput;
 import org.apache.avro.generic.GenericData;
+import org.apache.avro.io.AvroKeyValue;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapred.AvroValue;
 import org.apache.hadoop.conf.Configuration;
@@ -55,7 +56,7 @@ public class TestAvroKeyValueRecordReader {
 
     // Create the record reader over the avro input file.
     RecordReader<AvroKey<CharSequence>, AvroValue<Integer>> recordReader
-        = new AvroKeyValueRecordReader(
+        = new AvroKeyValueRecordReader<CharSequence, Integer>(
             Schema.create(Schema.Type.STRING), Schema.create(Schema.Type.INT)) {
       @Override
       protected SeekableInput createSeekableInput(Configuration conf, Path path)

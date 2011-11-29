@@ -5,9 +5,9 @@ package org.apache.hadoop.io;
 import java.io.IOException;
 
 import org.apache.avro.Schema;
+import org.apache.avro.io.AvroSerialization;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapred.AvroValue;
-import org.apache.avro.mapreduce.AvroSerialization;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;

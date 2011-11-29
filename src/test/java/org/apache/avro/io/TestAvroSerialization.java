@@ -1,6 +1,6 @@
 // (c) Copyright 2011 Odiago, Inc.
 
-package org.apache.avro.mapreduce;
+package org.apache.avro.io;
 
 import static org.junit.Assert.*;
 
@@ -10,6 +10,7 @@ import org.apache.avro.Schema;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapred.AvroValue;
 import org.apache.avro.mapred.AvroWrapper;
+import org.apache.avro.mapreduce.AvroJob;
 import org.apache.hadoop.io.serializer.Deserializer;
 import org.apache.hadoop.io.serializer.Serializer;
 import org.apache.hadoop.mapreduce.Job;
@@ -37,6 +38,7 @@ public class TestAvroSerialization {
     // Get a serializer from the configuration.
     AvroSerialization serialization
         = ReflectionUtils.newInstance(AvroSerialization.class, job.getConfiguration());
+    @SuppressWarnings("unchecked")
     Serializer<AvroWrapper> serializer = serialization.getSerializer(AvroKey.class);
     assertTrue(serializer instanceof AvroSerializer);
     AvroSerializer avroSerializer = (AvroSerializer) serializer;
@@ -55,6 +57,7 @@ public class TestAvroSerialization {
     // Get a serializer from the configuration.
     AvroSerialization serialization
         = ReflectionUtils.newInstance(AvroSerialization.class, job.getConfiguration());
+    @SuppressWarnings("unchecked")
     Serializer<AvroWrapper> serializer = serialization.getSerializer(AvroValue.class);
     assertTrue(serializer instanceof AvroSerializer);
     AvroSerializer avroSerializer = (AvroSerializer) serializer;
@@ -73,6 +76,7 @@ public class TestAvroSerialization {
     // Get a deserializer from the configuration.
     AvroSerialization serialization
         = ReflectionUtils.newInstance(AvroSerialization.class, job.getConfiguration());
+    @SuppressWarnings("unchecked")
     Deserializer<AvroWrapper> deserializer = serialization.getDeserializer(AvroKey.class);
     assertTrue(deserializer instanceof AvroKeyDeserializer);
     AvroKeyDeserializer avroDeserializer = (AvroKeyDeserializer) deserializer;
@@ -91,6 +95,7 @@ public class TestAvroSerialization {
     // Get a deserializer from the configuration.
     AvroSerialization serialization
         = ReflectionUtils.newInstance(AvroSerialization.class, job.getConfiguration());
+    @SuppressWarnings("unchecked")
     Deserializer<AvroWrapper> deserializer = serialization.getDeserializer(AvroValue.class);
     assertTrue(deserializer instanceof AvroValueDeserializer);
     AvroValueDeserializer avroDeserializer = (AvroValueDeserializer) deserializer;

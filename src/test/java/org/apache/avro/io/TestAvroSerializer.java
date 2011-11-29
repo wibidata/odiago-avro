@@ -1,6 +1,6 @@
 // (c) Copyright 2011 Odiago, Inc.
 
-package org.apache.avro.mapreduce;
+package org.apache.avro.io;
 
 import static org.junit.Assert.*;
 
@@ -10,9 +10,6 @@ import java.io.IOException;
 
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericDatumReader;
-import org.apache.avro.io.DatumReader;
-import org.apache.avro.io.Decoder;
-import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.mapred.AvroKey;
 import org.junit.Test;
 

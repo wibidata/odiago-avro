@@ -13,6 +13,9 @@ import org.apache.avro.Schema;
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.file.DataFileStream;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.io.AvroDatumConverter;
+import org.apache.avro.io.AvroDatumConverterFactory;
+import org.apache.avro.io.AvroKeyValue;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.mapred.AvroValue;
 import org.apache.avro.specific.SpecificDatumReader;
@@ -33,6 +36,7 @@ public class TestAvroKeyValueRecordWriter {
     AvroDatumConverterFactory factory = new AvroDatumConverterFactory(job.getConfiguration());
     AvroDatumConverter<Text, ?> keyConverter = factory.create(Text.class);
     AvroValue<TextStats> avroValue = new AvroValue<TextStats>(null);
+    @SuppressWarnings("unchecked")
     AvroDatumConverter<AvroValue<TextStats>, ?> valueConverter
         = factory.create((Class<AvroValue<TextStats>>) avroValue.getClass());
     CodecFactory compressionCodec = CodecFactory.nullCodec();

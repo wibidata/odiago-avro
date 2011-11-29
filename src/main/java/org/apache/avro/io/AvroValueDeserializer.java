@@ -1,9 +1,10 @@
 // (c) Copyright 2011 Odiago, Inc.
 
-package org.apache.avro.mapreduce;
+package org.apache.avro.io;
 
 import org.apache.avro.Schema;
 import org.apache.avro.mapred.AvroValue;
+import org.apache.avro.mapred.AvroWrapper;
 
 /**
  * Deserializes AvroValue objects within Hadoop.
@@ -12,7 +13,7 @@ import org.apache.avro.mapred.AvroValue;
  *
  * @see org.apache.avro.mapreduce.AvroDeserializer
  */
-public class AvroValueDeserializer<D> extends AvroDeserializer<AvroValue<D>, D> {
+public class AvroValueDeserializer<D> extends AvroDeserializer<AvroWrapper<D>, D> {
   /**
    * Constructor.
    *
@@ -29,7 +30,7 @@ public class AvroValueDeserializer<D> extends AvroDeserializer<AvroValue<D>, D> 
    * @return a new empty AvroValue.
    */
   @Override
-  protected AvroValue<D> createAvroWrapper() {
+  protected AvroWrapper<D> createAvroWrapper() {
     return new AvroValue<D>(null);
   }
 }

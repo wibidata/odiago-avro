@@ -1,6 +1,6 @@
 // (c) Copyright 2011 Odiago, Inc.
 
-package org.apache.avro.mapreduce;
+package org.apache.avro.io;
 
 import java.util.Collection;
 
@@ -49,9 +49,9 @@ public class AvroSerialization<T> extends Configured implements Serialization<Av
   public Deserializer<AvroWrapper<T>> getDeserializer(Class<AvroWrapper<T>> c) {
     Configuration conf = getConf();
     if (AvroKey.class.isAssignableFrom(c)) {
-      return new AvroKeyDeserializer(getKeyWriterSchema(conf), getKeyReaderSchema(conf));
+      return new AvroKeyDeserializer<T>(getKeyWriterSchema(conf), getKeyReaderSchema(conf));
     } else if (AvroValue.class.isAssignableFrom(c)) {
-      return new AvroValueDeserializer(getValueWriterSchema(conf), getValueReaderSchema(conf));
+      return new AvroValueDeserializer<T>(getValueWriterSchema(conf), getValueReaderSchema(conf));
     } else {
       throw new IllegalStateException("Only AvroKey and AvroValue are supported.");
     }

@@ -1,6 +1,6 @@
 // (c) Copyright 2011 Odiago, Inc.
 
-package org.apache.avro.mapreduce;
+package org.apache.avro.io;
 
 import java.util.Arrays;
 
@@ -52,6 +52,7 @@ public class AvroKeyValue<K, V> {
    *
    * @return The key from the key/value generic record.
    */
+  @SuppressWarnings("unchecked")
   public K getKey() {
     return (K) mKeyValueRecord.get(KEY_FIELD);
   }
@@ -61,6 +62,7 @@ public class AvroKeyValue<K, V> {
    *
    * @return The value from the key/value generic record.
    */
+  @SuppressWarnings("unchecked")
   public V getValue() {
     return (V) mKeyValueRecord.get(VALUE_FIELD);
   }

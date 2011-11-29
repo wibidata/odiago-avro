@@ -1,9 +1,10 @@
 // (c) Copyright 2011 Odiago, Inc.
 
-package org.apache.avro.mapreduce;
+package org.apache.avro.io;
 
 import org.apache.avro.Schema;
 import org.apache.avro.mapred.AvroKey;
+import org.apache.avro.mapred.AvroWrapper;
 
 /**
  * Deserializes AvroKey objects within Hadoop.
@@ -12,7 +13,7 @@ import org.apache.avro.mapred.AvroKey;
  *
  * @see org.apache.avro.mapreduce.AvroDeserializer
  */
-public class AvroKeyDeserializer<D> extends AvroDeserializer<AvroKey<D>, D> {
+public class AvroKeyDeserializer<D> extends AvroDeserializer<AvroWrapper<D>, D> {
   /**
    * Constructor.
    *
@@ -29,7 +30,7 @@ public class AvroKeyDeserializer<D> extends AvroDeserializer<AvroKey<D>, D> {
    * @return a new empty AvroKey.
    */
   @Override
-  protected AvroKey<D> createAvroWrapper() {
+  protected AvroWrapper<D> createAvroWrapper() {
     return new AvroKey<D>(null);
   }
 }

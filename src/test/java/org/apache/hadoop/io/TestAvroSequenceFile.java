@@ -110,7 +110,6 @@ public class TestAvroSequenceFile {
 
   /** Tests that reading and writing ordinary Writables still works. */
   @Test
-  @SuppressWarnings("unchecked")
   public void testReadWritables() throws IOException {
     Path sequenceFilePath = new Path(new File(mTempDir.getRoot(), "output.seq").getPath());
 

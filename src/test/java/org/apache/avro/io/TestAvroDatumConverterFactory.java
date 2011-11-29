@@ -1,6 +1,6 @@
 // (c) Copyright 2011 Odiago, Inc.
 
-package org.apache.avro.mapreduce;
+package org.apache.avro.io;
 
 import static org.junit.Assert.*;
 
@@ -11,6 +11,7 @@ import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericFixed;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapred.AvroValue;
+import org.apache.avro.mapreduce.AvroJob;
 import org.apache.hadoop.io.BooleanWritable;
 import org.apache.hadoop.io.ByteWritable;
 import org.apache.hadoop.io.BytesWritable;
@@ -39,6 +40,7 @@ public class TestAvroDatumConverterFactory {
     AvroJob.setOutputKeySchema(mJob, Schema.create(Schema.Type.STRING));
 
     AvroKey<CharSequence> avroKey = new AvroKey<CharSequence>("foo");
+    @SuppressWarnings("unchecked")
     AvroDatumConverter<AvroKey<CharSequence>, ?> converter = mFactory.create(
         (Class<AvroKey<CharSequence>>) avroKey.getClass());
     assertEquals("foo", converter.convert(avroKey).toString());
@@ -49,6 +51,7 @@ public class TestAvroDatumConverterFactory {
     AvroJob.setOutputValueSchema(mJob, Schema.create(Schema.Type.INT));
 
     AvroValue<Integer> avroValue = new AvroValue<Integer>(42);
+    @SuppressWarnings("unchecked")
     AvroDatumConverter<AvroValue<Integer>, Integer> converter = mFactory.create(
         (Class<AvroValue<Integer>>) avroValue.getClass());
     assertEquals(42, converter.convert(avroValue).intValue());

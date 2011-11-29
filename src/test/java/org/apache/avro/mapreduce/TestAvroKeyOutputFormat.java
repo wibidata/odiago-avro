@@ -60,6 +60,7 @@ public class TestAvroKeyOutputFormat {
         .anyTimes();
 
     // Create a mock record writer.
+    @SuppressWarnings("unchecked")
     RecordWriter<AvroKey<Integer>, NullWritable> expectedRecordWriter
         = createMock(RecordWriter.class);
     AvroKeyOutputFormat.RecordWriterFactory recordWriterFactory

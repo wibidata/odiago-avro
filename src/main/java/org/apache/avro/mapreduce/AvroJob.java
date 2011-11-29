@@ -3,6 +3,8 @@
 package org.apache.avro.mapreduce;
 
 import org.apache.avro.Schema;
+import org.apache.avro.io.AvroKeyComparator;
+import org.apache.avro.io.AvroSerialization;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapred.AvroValue;
 import org.apache.hadoop.conf.Configuration;

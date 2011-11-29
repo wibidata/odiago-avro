@@ -1,6 +1,6 @@
 // (c) Copyright 2011 Odiago, Inc.
 
-package org.apache.avro.mapreduce;
+package org.apache.avro.io;
 
 import java.nio.ByteBuffer;
 
@@ -11,6 +11,7 @@ import org.apache.avro.generic.GenericFixed;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapred.AvroValue;
 import org.apache.avro.mapred.AvroWrapper;
+import org.apache.avro.mapreduce.AvroJob;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.io.BooleanWritable;
@@ -59,6 +60,7 @@ public class AvroDatumConverterFactory extends Configured {
    * @param inputClass The type of input data to convert.
    * @return A converter that turns objects of type <code>inputClass</code> into Avro data.
    */
+  @SuppressWarnings("unchecked")
   public <IN, OUT> AvroDatumConverter<IN, OUT> create(Class<IN> inputClass) {
     if (AvroKey.class.isAssignableFrom(inputClass)) {
       Schema schema = AvroJob.getOutputKeySchema(getConf());

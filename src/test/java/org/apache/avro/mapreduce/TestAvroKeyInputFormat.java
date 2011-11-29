@@ -37,6 +37,7 @@ public class TestAvroKeyInputFormat {
     replay(context);
 
     AvroKeyInputFormat inputFormat = new AvroKeyInputFormat();
+    @SuppressWarnings("unchecked")
     RecordReader<AvroKey<Object>, NullWritable> recordReader = inputFormat.createRecordReader(
         inputSplit, context);
     assertNotNull(inputFormat);

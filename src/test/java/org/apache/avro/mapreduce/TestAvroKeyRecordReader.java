@@ -42,7 +42,7 @@ public class TestAvroKeyRecordReader {
     // Create the record reader.
     Schema readerSchema = Schema.create(Schema.Type.STRING);
     RecordReader<AvroKey<CharSequence>, NullWritable> recordReader
-        = new AvroKeyRecordReader(readerSchema) {
+        = new AvroKeyRecordReader<CharSequence>(readerSchema) {
       @Override
       protected SeekableInput createSeekableInput(Configuration conf, Path path)
           throws IOException {

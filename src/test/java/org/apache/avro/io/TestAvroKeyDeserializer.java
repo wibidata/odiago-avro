@@ -1,6 +1,6 @@
 // (c) Copyright 2011 Odiago, Inc.
 
-package org.apache.avro.mapreduce;
+package org.apache.avro.io;
 
 import static org.junit.Assert.*;
 
@@ -10,10 +10,7 @@ import java.io.IOException;
 
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericDatumWriter;
-import org.apache.avro.io.DatumWriter;
-import org.apache.avro.io.Encoder;
-import org.apache.avro.io.EncoderFactory;
-import org.apache.avro.mapred.AvroKey;
+import org.apache.avro.mapred.AvroWrapper;
 import org.junit.Test;
 
 public class TestAvroKeyDeserializer {
@@ -40,7 +37,7 @@ public class TestAvroKeyDeserializer {
     // Deserialize the records.
     ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
     deserializer.open(inputStream);
-    AvroKey<CharSequence> record = null;
+    AvroWrapper<CharSequence> record = null;
 
     record = deserializer.deserialize(record);
     assertEquals("record1", record.datum().toString());

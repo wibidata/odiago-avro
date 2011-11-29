@@ -3,9 +3,9 @@
 package org.apache.avro.mapreduce;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
-import org.apache.avro.file.CodecFactory;
+import org.apache.avro.io.AvroDatumConverter;
+import org.apache.avro.io.AvroDatumConverterFactory;
 import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -28,6 +28,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class AvroKeyValueOutputFormat<K, V> extends AvroOutputFormatBase<K, V> {
   /** {@inheritDoc} */
   @Override
+  @SuppressWarnings("unchecked")
   public RecordWriter<K, V> getRecordWriter(TaskAttemptContext context) throws IOException {
     AvroDatumConverterFactory converterFactory = new AvroDatumConverterFactory(
         context.getConfiguration());

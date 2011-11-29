@@ -64,6 +64,7 @@ public class AvroKeyOutputFormat<T> extends AvroOutputFormatBase<AvroKey<T>, Nul
 
   /** {@inheritDoc} */
   @Override
+  @SuppressWarnings("unchecked")
   public RecordWriter<AvroKey<T>, NullWritable> getRecordWriter(TaskAttemptContext context)
       throws IOException {
     // Get the writer schema.

@@ -1,14 +1,11 @@
 // (c) Copyright 2011 Odiago, Inc.
 
-package org.apache.avro.mapreduce;
+package org.apache.avro.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.avro.Schema;
-import org.apache.avro.io.BinaryEncoder;
-import org.apache.avro.io.DatumWriter;
-import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.mapred.AvroWrapper;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.hadoop.io.serializer.Serializer;
