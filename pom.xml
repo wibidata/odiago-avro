@@ -24,7 +24,14 @@
   <packaging>jar</packaging>
 
   <name>odiago-avro</name>
-  <url>http://www.odiago.com</url>
+	<url>http://www.odiago.com</url>
+
+	<repositories>
+		<repository>
+			<id>Cloudera Maven Repository</id>
+			<url>https://repository.cloudera.com/content/repositories/releases/</url>
+		</repository>
+	</repositories>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
