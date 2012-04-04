@@ -1,6 +1,11 @@
 Release Notes: odiago-avro
 ==========================
 
+### Version 1.0.6
+
+* Upgraded to Avro 1.6.3.
+* Added Cloudera public repository to the pom.
+
 ### Version 1.0.5
 
 * Applied the Apache 2.0 license.
