@@ -1,0 +1,5 @@
+org.apache.avro.file
+org.apache.avro.io
+org.apache.avro.mapreduce
+org.apache.avro.util
+org.apache.hadoop.io
