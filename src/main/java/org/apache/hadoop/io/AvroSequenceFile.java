@@ -88,23 +88,24 @@ public final class AvroSequenceFile {
    * @throws IOException If the writer cannot be created.
    */
   public static SequenceFile.Writer createWriter(Writer.Options options) throws IOException {
-    switch (options.getCompressionType()) {
-    case NONE:
-      return new Writer(options);
-    case RECORD:
-      return new RecordCompressWriter(options);
-    case BLOCK:
-      return new BlockCompressWriter(options);
-    default:
-      throw new IllegalArgumentException(
-          "Invalid compression type: " + options.getCompressionType());
-    }
+    // TODO: This method is deprecated. We should construct a specialized Writer.Option instead.
+    return SequenceFile.createWriter(options.getFileSystem(),
+        options.getConfigurationWithAvroSerialization(),
+        options.getOutputPath(), options.getKeyClass(), options.getValueClass(),
+        options.getBufferSizeBytes(), options.getReplicationFactor(),
+        options.getBlockSizeBytes(), options.getCompressionType(),
+        options.getCompressionCodec(), options.getProgressable(),
+        options.getMetadataWithAvroSchemas());
   }
 
   /**
    * A writer for an uncompressed SequenceFile that supports Avro data.
    */
   public static class Writer extends SequenceFile.Writer {
+    Writer(Configuration conf, Option[] opts) throws IOException {
+      super(conf, opts);
+    }
+
     /**
      * A helper class to encapsulate the options that can be used to construct a Writer.
      */
@@ -520,58 +521,6 @@ public final class AvroSequenceFile {
         }
         return mMetadata;
       }
-    }
-
-    /**
-     * Creates a new <code>Writer</code> to a SequenceFile that supports Avro data.
-     *
-     * @param options The writer options.
-     * @throws IOException If the writer cannot be initialized.
-     */
-    public Writer(Options options) throws IOException {
-      super(options.getFileSystem(), options.getConfigurationWithAvroSerialization(),
-          options.getOutputPath(), options.getKeyClass(), options.getValueClass(),
-          options.getBufferSizeBytes(), options.getReplicationFactor(),
-          options.getBlockSizeBytes(), options.getProgressable(),
-          options.getMetadataWithAvroSchemas());
-    }
-  }
-
-  /**
-   * A Writer for Avro-enabled SequenceFiles using record-level compression.
-   */
-  public static class RecordCompressWriter extends SequenceFile.RecordCompressWriter {
-    /**
-     * Creates a new <code>RecordCompressWriter</code> to a SequenceFile that supports Avro data.
-     *
-     * @param options The writer options.
-     * @throws IOException If the writer cannot be initialized.
-     */
-    public RecordCompressWriter(Writer.Options options) throws IOException {
-      super(options.getFileSystem(), options.getConfigurationWithAvroSerialization(),
-          options.getOutputPath(), options.getKeyClass(), options.getValueClass(),
-          options.getBufferSizeBytes(), options.getReplicationFactor(),
-          options.getBlockSizeBytes(), options.getCompressionCodec(),
-          options.getProgressable(), options.getMetadataWithAvroSchemas());
-    }
-  }
-
-  /**
-   * A Writer for Avro-enabled SequenceFiles using block-level compression.
-   */
-  public static class BlockCompressWriter extends SequenceFile.BlockCompressWriter {
-    /**
-     * Creates a new <code>BlockCompressWriter</code> to a SequenceFile that supports Avro data.
-     *
-     * @param options The writer options.
-     * @throws IOException If the writer cannot be initialized.
-     */
-    public BlockCompressWriter(Writer.Options options) throws IOException {
-      super(options.getFileSystem(), options.getConfigurationWithAvroSerialization(),
-          options.getOutputPath(), options.getKeyClass(), options.getValueClass(),
-          options.getBufferSizeBytes(), options.getReplicationFactor(),
-          options.getBlockSizeBytes(), options.getCompressionCodec(),
-          options.getProgressable(), options.getMetadataWithAvroSchemas());
     }
   }
 

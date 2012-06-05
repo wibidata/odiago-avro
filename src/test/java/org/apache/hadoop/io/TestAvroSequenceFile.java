@@ -192,7 +192,7 @@ public class TestAvroSequenceFile {
     } else {
       options.withValueClass(valueClass);
     }
-    SequenceFile.Writer writer = new AvroSequenceFile.Writer(options);
+    SequenceFile.Writer writer = AvroSequenceFile.createWriter(options);
 
     // Write some records.
     for (int i = 0; i < records.length; i += 2) {
