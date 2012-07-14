@@ -19,8 +19,8 @@ package org.apache.avro.mapreduce;
 
 import java.io.IOException;
 
-import org.apache.avro.io.AvroDatumConverter;
-import org.apache.avro.io.AvroDatumConverterFactory;
+import org.apache.avro.hadoop.io.AvroDatumConverter;
+import org.apache.avro.hadoop.io.AvroDatumConverterFactory;
 import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;

@@ -27,7 +27,7 @@ import org.apache.avro.Schema;
 import org.apache.avro.file.SeekableFileInput;
 import org.apache.avro.file.SeekableInput;
 import org.apache.avro.generic.GenericData;
-import org.apache.avro.io.AvroKeyValue;
+import org.apache.avro.hadoop.io.AvroKeyValue;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapred.AvroValue;
 import org.apache.hadoop.conf.Configuration;

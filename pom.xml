@@ -20,7 +20,7 @@
 
   <groupId>com.odiago.avro</groupId>
   <artifactId>odiago-avro</artifactId>
-  <version>1.0.7-SNAPSHOT</version>
+  <version>1.0.7-cdh3-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>odiago-avro</name>
@@ -35,7 +35,7 @@
 
     <scm.connection>scm:git:ssh://git@github.com/wibidata/odiago-avro.git</scm.connection>
 
-    <avro.version>1.6.3</avro.version>
+    <avro.version>1.7.0</avro.version>
   </properties>
 
   <build>
