@@ -445,7 +445,7 @@ public final class AvroSequenceFile {
       /**
        * Gets the desired number of replicas to store for each block of the file.
        *
-       * @return The replciation factor for the blocks of the file.
+       * @return The replication factor for the blocks of the file.
        */
       public short getReplicationFactor() {
         if (DEFAULT == mReplicationFactor) {
@@ -509,7 +509,7 @@ public final class AvroSequenceFile {
        * @return The metadata header with Avro writer schemas if Avro data is being written.
        */
       private Metadata getMetadataWithAvroSchemas() {
-        // mMetadata was intialized in the constructor, and cannot be set to null.
+        // mMetadata was initialized in the constructor, and cannot be set to null.
         assert null != mMetadata;
 
         if (null != mKeyWriterSchema) {
