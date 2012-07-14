@@ -20,7 +20,7 @@
 
   <groupId>com.odiago.avro</groupId>
   <artifactId>odiago-avro</artifactId>
-  <version>1.0.7-cdh3</version>
+  <version>1.0.8-cdh3-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>odiago-avro</name>
