@@ -15,12 +15,13 @@
  * permissions and limitations under the License.
  */
 
-package org.apache.avro.mapreduce;
+package com.wibidata.avro.mapreduce;
 
 import java.io.IOException;
 
 import org.apache.avro.Schema;
 import org.apache.avro.mapred.AvroKey;
+import org.apache.avro.mapreduce.AvroJob;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;

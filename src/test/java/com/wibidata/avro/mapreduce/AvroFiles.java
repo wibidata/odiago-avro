@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-package org.apache.avro.mapreduce;
+package com.wibidata.avro.mapreduce;
 
 import java.io.File;
 import java.io.IOException;

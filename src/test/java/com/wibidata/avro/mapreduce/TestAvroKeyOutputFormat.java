@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-package org.apache.avro.mapreduce;
+package com.wibidata.avro.mapreduce;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
@@ -27,6 +27,7 @@ import org.apache.avro.Schema;
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapred.AvroOutputFormat;
+import org.apache.avro.mapreduce.AvroJob;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Job;
@@ -34,7 +35,6 @@ import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.TaskAttemptID;
 import org.easymock.Capture;
-import org.easymock.EasyMock;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;

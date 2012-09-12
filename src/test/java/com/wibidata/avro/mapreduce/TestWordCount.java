@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-package org.apache.avro.mapreduce;
+package com.wibidata.avro.mapreduce;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -27,6 +27,7 @@ import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapred.FsInput;
+import org.apache.avro.mapreduce.AvroJob;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.util.Utf8;
 import org.apache.hadoop.fs.FileStatus;
@@ -42,7 +43,6 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;

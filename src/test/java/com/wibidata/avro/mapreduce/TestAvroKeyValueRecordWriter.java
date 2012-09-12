@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-package org.apache.avro.mapreduce;
+package com.wibidata.avro.mapreduce;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
@@ -33,6 +33,7 @@ import org.apache.avro.hadoop.io.AvroDatumConverterFactory;
 import org.apache.avro.hadoop.io.AvroKeyValue;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.mapred.AvroValue;
+import org.apache.avro.mapreduce.AvroJob;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;

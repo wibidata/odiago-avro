@@ -1,5 +1,5 @@
 {
-  "namespace": "org.apache.avro.mapreduce",
+  "namespace": "com.wibidata.avro.mapreduce",
   "type": "record",
   "name": "TextStats",
   "fields": [

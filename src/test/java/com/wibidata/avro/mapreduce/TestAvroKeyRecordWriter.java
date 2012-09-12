@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-package org.apache.avro.mapreduce;
+package com.wibidata.avro.mapreduce;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
@@ -33,7 +33,6 @@ import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
-import org.easymock.EasyMock;
 import org.junit.Test;
 
 public class TestAvroKeyRecordWriter {

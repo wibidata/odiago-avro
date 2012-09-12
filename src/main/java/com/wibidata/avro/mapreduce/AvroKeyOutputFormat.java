@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-package org.apache.avro.mapreduce;
+package com.wibidata.avro.mapreduce;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,7 +23,7 @@ import java.io.OutputStream;
 import org.apache.avro.Schema;
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.mapred.AvroKey;
-import org.apache.avro.mapred.AvroOutputFormat;
+import org.apache.avro.mapreduce.AvroJob;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
