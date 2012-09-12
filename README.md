@@ -25,7 +25,7 @@ To build `target/odiago-avro-${project.version}.jar` run:
 
 ### Documentation
 
-* [Java API (Javadoc) 1.0.7-cdh4](http://wibidata.github.com/odiago-avro/1.0.7-cdh4/apidocs/)
+* [Java API (Javadoc) 1.1.0-cdh4](http://wibidata.github.com/odiago-avro/1.1.0-cdh4/apidocs/)
 * [Java API (Javadoc) 1.0.7-cdh3](http://wibidata.github.com/odiago-avro/1.0.7-cdh3/apidocs/)
 * [Java API (Javadoc) 1.0.6](http://wibidata.github.com/odiago-avro/1.0.6/apidocs/)
 * [Java API (Javadoc) 1.0.5](http://wibidata.github.com/odiago-avro/1.0.5/apidocs/)
